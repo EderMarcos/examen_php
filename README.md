@@ -1,27 +1,80 @@
-# Slim Framework 3 Skeleton Application
+# Examen PHP
+Este pryecto fue creado por Jose Eder Marcos Lara usando el framework Slim
 
-Use this skeleton application to quickly setup and start working on a new Slim Framework 3 application. This application uses the latest Slim 3 with the PHP-View template renderer. It also uses the Monolog logger.
+## Instalacion
 
-This skeleton application was built for Composer. This makes setting up a new Slim Framework application quick and easy.
+Para ejecutar el proyecto se requiere un servidor, en mi caso ocupe xampp, se clona el proyecto dentro de la carpeta htdocs, y tambien es necesario instalar composer.
 
-## Install the Application
+    cd examen_php/
+    curl -sS https://getcomposer.org/installer | php
 
-Run this command from the directory in which you want to install your new Slim Framework application.
+Posteriormente hay que hacer un `[composer install]` para instalar los archivos que requiera la aplicacion. Para probar los 
 
-    php composer.phar create-project slim/slim-skeleton [my-app-name]
+* Es necesario crear la base de datos `[examen_php]` e importar el script mail.sql.
+* Para probar si esta corriendo el api, se puede acceder a la siguiente ruta `http://localhost/examen_php/public/test/` y deberia de aparecer una respuesta en json
+* Se recomiendo el uso de postman para el resto de las API
 
-Replace `[my-app-name]` with the desired directory name for your new application. You'll want to:
+#API de Shipment
+* Ver todos los elementos: Metodo Get `http://localhost/examen_php/public/shipment/get/`
+* Ver solo uno: Metodo Get `http://localhost/examen_php/public/shipment/get/0/`
+* Crear: Metodo Post `http://localhost/examen_php/public/shipment/get/`
+       
+       Atributos
+       * customer_email
+       * order_id
+       * imei
+       * track_start
+       * track_duration_hour
+       * track_interval_min
+       * next_position_update
+       * shipment_vehicle_id
+* Actualizar: Metodo Put `http://localhost/examen_php/public/shipment/put/0/`
 
-* Point your virtual host document root to your new application's `public/` directory.
-* Ensure `logs/` is web writeable.
+        Atributos
+       * customer_email
+       * order_id
+       * imei
+       * track_start
+       * track_duration_hour
+       * track_interval_min
+       * next_position_update
+       * shipment_vehicle_id
+* Eliminar: Metodo Delete `http://localhost/examen_php/public/shipment/delete/0/`
 
-To run the application in development, you can run these commands 
+        Atributos
+       * customer_email
+       * order_id
+       * imei
+       * track_start
+       * track_duration_hour
+       * track_interval_min
+       * next_position_update
+       * shipment_vehicle_id
+       
+#API de Shipment Vehicle
+* Ver todos los elementos: Metodo Get `http://localhost/examen_php/public/shipment-vehicle/get/`
+* Ver solo uno: Metodo Get `http://localhost/examen_php/public/shipment-vehicle/get/0/`
+* Crear: Metodo Post `http://localhost/examen_php/public/shipment-vehicle/get/`
+       
+       Atributos
+       * provider_id
+       * pos_date
+       * pos_lat
+       * pos_lng
+       * imei
+* Actualizar: Metodo Put `http://localhost/examen_php/public/shipment-vehicle/put/0/`
 
-	cd [my-app-name]
-	php composer.phar start
+        Atributos
+       * provider_id
+       * pos_date
+       * pos_lat
+       * pos_lng
+       * imei
+* Eliminar: Metodo Delete `http://localhost/examen_php/public/shipment-vehicle/delete/0/`
 
-Run this command in the application directory to run the test suite
-
-	php composer.phar test
-
-That's it! Now go build something cool.
+        Atributos
+       * provider_id
+       * pos_date
+       * pos_lat
+       * pos_lng
+       * imei
