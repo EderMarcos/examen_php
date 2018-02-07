@@ -15,6 +15,15 @@ class ShipmentModel {
     $this->table = 'shipment';
   }
 
+  public function async() {
+    $cont = 0;
+    while (true) {
+      write($cont);
+      $cont++;
+      sleep(1);
+    }
+  }
+
   public function GetAll() {
     try {
       $stm = $this->db->prepare("SELECT * FROM $this->table");

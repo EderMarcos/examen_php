@@ -61,5 +61,19 @@ class MailModel {
       return $this->response->getResponse();
     }
   }
+
+  public function sendMail($to) {
+    $to = $to;
+    $subject = "Localizacion de envio: " . $data;
+    $headers = "From: no-reply@support.com";
+    $message = "Este es un recordatorio";
+
+    $bool = mail($to, $subject, $message, $headers);
+    if ($bool) {
+        echo "Mensaje enviado";
+    } else {
+        echo "Error al enviar mensaje";
+    }
+}
 }
 

@@ -4,17 +4,33 @@ use \App\Model\ShipmentModel;
 use \App\Model\ShipmentVehicleModel;
 
 $app->get('/test/', function ($req, $res, $args) {
-  $data = array(
-    'status' => 'true',
-    'msg' => 'api funcionando',
-  );
-
+  ini_set('max_execution_time', 1200);
   return $res
-    ->withHeader('Content-type', 'application/json', 'charset', 'utf-8')
+    ->withHeader('Content - type', 'application / json')
     ->getBody()
-    ->write(json_encode($data));
+    ->write('Web service up');
 });
 
+// Carga de templates
+$app->group('/view/shipments', function () {
+  $this->get('/', function ($req, $res, $args) {
+    return $this->renderer->render($res, 'shipments.phtml', $args);
+  });
+  $this->get('/new/', function ($req, $res, $args) {
+    return $this->renderer->render($res, 'new-shipment.phtml', $args);
+  });
+});
+
+$app->group('/view/shipment-vehicles', function () {
+  $this->get('/', function ($req, $res, $args) {
+    return $this->renderer->render($res, 'vehicles.phtml', $args);
+  });
+  $this->get('/new/', function ($req, $res, $args) {
+    return $this->renderer->render($res, 'new-vehicles.phtml', $args);
+  });
+});
+
+// Api shipment
 $app->group('/shipment/', function () {
   $this->get('get/', function ($req, $res, $args) {
     $shipment = new ShipmentModel();
@@ -28,7 +44,6 @@ $app->group('/shipment/', function () {
             )
         );
   });
-
   $this->get('get/{id}/', function ($req, $res, $args) {
     $shipment = new ShipmentModel();
     return $res
@@ -43,7 +58,6 @@ $app->group('/shipment/', function () {
             )
         );
   });
-
   $this->post('set/', function ($req, $res, $args) {
     $shipment = new ShipmentModel();
     return $res
@@ -58,7 +72,6 @@ $app->group('/shipment/', function () {
             )
         );
   });
-
   $this->put('put/{id}/', function ($req, $res, $args) {
     $shipment = new ShipmentModel();
     return $res
@@ -73,7 +86,6 @@ $app->group('/shipment/', function () {
             )
         );
   });
-
   $this->delete('delete/{id}/', function ($req, $res, $args) {
     $shipment = new ShipmentModel();
     return $res
@@ -89,7 +101,6 @@ $app->group('/shipment/', function () {
         );
   });
 });
-
 $app->group('/shipment-vehicle/', function () {
   $this->get('get/', function ($req, $res, $args) {
     $shipment_vehicle = new ShipmentVehicleModel();
@@ -103,7 +114,6 @@ $app->group('/shipment-vehicle/', function () {
             )
         );
   });
-
   $this->get('get/{id}/', function ($req, $res, $args) {
     $shipment_vehicle = new ShipmentVehicleModel();
     return $res
@@ -118,7 +128,6 @@ $app->group('/shipment-vehicle/', function () {
             )
         );
   });
-
   $this->post('set/', function ($req, $res, $args) {
     $shipment_vehicle = new ShipmentVehicleModel();
     return $res
@@ -133,7 +142,6 @@ $app->group('/shipment-vehicle/', function () {
             )
         );
   });
-
   $this->put('put/{id}/', function ($req, $res, $args) {
     $shipment_vehicle = new ShipmentVehicleModel();
     return $res
@@ -148,7 +156,6 @@ $app->group('/shipment-vehicle/', function () {
             )
         );
   });
-
   $this->delete('delete/{id}/', function ($req, $res, $args) {
     $shipment_vehicle = new ShipmentVehicleModel();
     return $res
