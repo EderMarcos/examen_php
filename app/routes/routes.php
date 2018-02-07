@@ -59,7 +59,14 @@ $app->group('/shipment/', function () {
         );
   });
   $this->post('set/', function ($req, $res, $args) {
+    ini_set('max_execution_time', 1200);
+    $shipment_vehicle = new ShipmentVehicleModel();
+
     $shipment = new ShipmentModel();
+    $shipment->Post($req->getParsedBody());
+
+    $mail = new \App\Model\MailModel();
+    $mail->sendMail($req->getParsedBody(), $shipment_vehicle->Get($req->getParsedBody()['shipment_vehicle_id']));
     return $res
         ->withHeader('Content-type', 'application/json')
         ->getBody()
@@ -80,7 +87,8 @@ $app->group('/shipment/', function () {
         ->write(
             json_encode(
                 $shipment->Update(
-                    $req->getParsedBody()
+                    $req->getParsedBody(),
+                    $args['id']
                 ),
                 JSON_PRETTY_PRINT
             )
@@ -101,6 +109,7 @@ $app->group('/shipment/', function () {
         );
   });
 });
+
 $app->group('/shipment-vehicle/', function () {
   $this->get('get/', function ($req, $res, $args) {
     $shipment_vehicle = new ShipmentVehicleModel();
@@ -150,7 +159,8 @@ $app->group('/shipment-vehicle/', function () {
         ->write(
             json_encode(
                 $shipment_vehicle->Update(
-                    $req->getParsedBody()
+                    $req->getParsedBody(),
+                    $args['id']
                 ),
                 JSON_PRETTY_PRINT
             )

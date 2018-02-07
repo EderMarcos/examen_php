@@ -1,79 +1,40 @@
 <?php
+
 namespace App\Model;
 
 use App\Lib\Database;
 use App\Lib\Response;
 
-class MailModel {
-  private $email;
-  private $subject;
-  private $name;
-  private $cellPhone;
-  private $message;
+class MailModel
+{
   private $db;
   private $response;
+
 //  private $table = 'user';
 
-  public function __construct() {
+  public function __construct()
+  {
     $this->db = Database::init();
     $this->response = new Response();
   }
 
-  public function setMail($data) {
-    $this->email = $data["inputCorreo"];
-    $this->subject = $data["inputAsunto"];
-    $this->name = $data["inputNombre"];
-    $this->cellPhone = $data["inputTelefono"];
-    $this->message = $data["inputMensaje"];
+  public function sendMail($data, $vehicle) {
+    $finalHour = time() + (60 * $data['track_duration_hour']);
+    while (time() <= $finalHour) {
+      $to = $data['customer_email'];
+      $subject = "Localizacion del vehiculo con el id " . $data['shipment_vehicle_id'] . " con imei " . $data['imei'];
+      $headers = "From: no-reply@support.com";
+      $message = "Ubicacion actual del vehiculo con con cargamento cuyo imei es: " . $data['imei'] . " es Latitud: " .$vehicle['pos_lat']. " Longitud: ". $data['pos_lng'];
 
-    try {
-      $mail = new PHPMailer;
-      $mail->IsSMTP();
-      $mail->SMTPAuth = true;
-      $mail->Host = ""; // Host
-      $mail->Port = 26;
-      $mail->Username = ""; //user del host
-      $mail->Password = ""; // password del host
-      $mail->setFrom($this->email, 'Localizacion');
-      $mail->Subject = "A Transactional Email From Web App";
-
-
-      $mail->addAddress("skrap.marcos@gmail.com");
-      $mail->addReplyTo('no-reply@badger-dating.com', 'BadgerDating.com');
-      $mail->isHTML(true);
-      $mail->Subject = $this->subject;
-
-      if (!$mail->Send()) {
-        $this->response->setResponse(
-          array("msg" => null),
-          array("codigo" => "200", "msg" => "Correo enviado"));
-        return $this->response->getResponse();
+      $bool = mail($to, $subject, $message, $headers);
+      if ($bool) {
+        echo "Mensaje enviado";
       } else {
-        $this->response->setResponse(
-          array("msg" => null),
-          array("codigo" => "400", "msg" => "Error al enviar el correo"));
-        return $this->response->getResponse();
+        echo "Error al enviar mensaje";
       }
-    } catch (Exception $exception) {
-      $this->response->setResponse(
-        array("msg" => null),
-        array("codigo" => "400", "msg" => $exception->getMessage()));
-      return $this->response->getResponse();
+
+      sleep($data['track_interval_min']);
     }
   }
-
-  public function sendMail($to) {
-    $to = $to;
-    $subject = "Localizacion de envio: " . $data;
-    $headers = "From: no-reply@support.com";
-    $message = "Este es un recordatorio";
-
-    $bool = mail($to, $subject, $message, $headers);
-    if ($bool) {
-        echo "Mensaje enviado";
-    } else {
-        echo "Error al enviar mensaje";
-    }
-}
 }
 

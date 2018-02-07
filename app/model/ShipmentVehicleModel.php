@@ -3,6 +3,7 @@ namespace App\Model;
 
 use App\Lib\Database;
 use App\Lib\Response;
+use DateTime;
 
 class ShipmentVehicleModel {
   private $db;
@@ -49,8 +50,8 @@ class ShipmentVehicleModel {
   }
   public function Post($data) {
     try {
-      $sql = "INSERT INTO $this->table(provider_id, pos_date, pos_lat, pos_lng, imei) VALUES (?,?,?,?)";
-      $this->db->prepare($sql)->execute(array($data['provider_id'], $data['pos_date'], $data['pos_lat'], $data['pos_lng'], $data['imei']));
+      $sql = "INSERT INTO $this->table(provider_id, pos_date, pos_lat, pos_lng, imei) VALUES (?,?,?,?,?)";
+      $this->db->prepare($sql)->execute(array($data['provider_id'], date("Y-m-d H:i:s"), $data['pos_lat'], $data['pos_lng'], $data['imei']));
 
       $this->response->setResponse(
         array("msg" => null),
@@ -63,14 +64,14 @@ class ShipmentVehicleModel {
       return $this->response->getResponse();
     }
   }
-  public function Update($data)
+  public function Update($data, $id)
   {
     try {
-      if (isset($data['id'])) {
+      if (isset($id)) {
         $sql = "UPDATE $this->table SET 
               provider_id = ?, pos_date = ?, pos_lat = ?, pos_lng = ?, imei = ?
-         WHERE id = ?";
-        $this->db->prepare($sql)->execute(array($data['provider_id'], $data['pos_date'], $data['pos_lat'], $data['pos_lng'], $data['imei']));
+         WHERE id = $id";
+        $this->db->prepare($sql)->execute(array($data['provider_id'], date("Y-m-d H:i:s"), $data['pos_lat'], $data['pos_lng'], $data['imei']));
 
         $this->response->setResponse(
             array("msg" => "Ok"),

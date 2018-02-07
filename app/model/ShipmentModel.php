@@ -58,8 +58,8 @@ class ShipmentModel {
   }
   public function Post($data) {
     try {
-      $sql = "INSERT INTO $this->table(customer_email, order_id, imei, track_start, track_duration_hour, track_interval_min, next_position, shipment_vehicle_id ) VALUES (?,?,?,?,?,?,?,?)";
-      $this->db->prepare($sql)->execute(array($data['customer_email'], $data['order_id'], $data['imei'], $data['track_start'], $data['track_duration_hour'], $data['track_interval_min'] ,$data['next_position'], $data['shipment_vehicle_id']));
+      $sql = "INSERT INTO $this->table(customer_email, order_id, imei, track_start, track_duration_hour, track_interval_min, next_position_update, shipment_vehicle_id ) VALUES (?,?,?,?,?,?,?,?)";
+      $this->db->prepare($sql)->execute(array($data['customer_email'], $data['order_id'], $data['imei'], date("Y-m-d H:i:s"), $data['track_duration_hour'], $data['track_interval_min'], date("Y-m-d H:i:s"), $data['shipment_vehicle_id']));
 
       $this->response->setResponse(
         array("msg" => null),
@@ -72,14 +72,13 @@ class ShipmentModel {
       return $this->response->getResponse();
     }
   }
-  public function Update($data)
-  {
+  public function Update($data, $id) {
     try {
-      if (isset($data['id'])) {
+      if (isset($id)) {
         $sql = "UPDATE $this->table SET 
-              customer_email = ?, order_id = ?, imei = ?, track_start = ?, track_duration_hour = ?, track_interval_min = ?, next_position = ?, shipment_vehicle_id = ?
-         WHERE id = ?";
-        $this->db->prepare($sql)->execute(array($data['customer_email'], $data['order_id'], $data['imei'], $data['track_start'], $data['track_duration_hour'], $data['track_interval_min'] ,$data['next_position'], $data['shipment_vehicle_id']));
+              customer_email = ?, order_id = ?, imei = ?, track_start = ?, track_duration_hour = ?, track_interval_min = ?, next_position_update = ?, shipment_vehicle_id = ?
+         WHERE id = $id";
+       $this->db->prepare($sql)->execute(array($data['customer_email'], $data['order_id'], $data['imei'], date("Y-m-d H:i:s"), $data['track_duration_hour'], $data['track_interval_min'], date("Y-m-d H:i:s"), $data['shipment_vehicle_id']));
 
         $this->response->setResponse(
             array("msg" => "Ok"),
